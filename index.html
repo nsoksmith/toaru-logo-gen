@@ -3,63 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <title>とあるロゴジェネレーター</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <h1>とあるロゴジェネレーター</h1>
 
-  <div class="input-inline">
+  <div class="input-area">
     <span>とある</span>
-    <input type="text" id="kanji2" maxlength="2" />
-    <span>の</span>
-    <input type="text" id="kanji4" maxlength="4" />
-    <input type="text" id="katakana" />
+    <input id="kanji2" type="text" maxlength="2" />
+    <input id="kanji4" type="text" maxlength="4" />
+    <input id="katakana" type="text" maxlength="10" />
   </div>
 
-  <div class="gradient-controls">
+  <div class="gradient-buttons">
+    <button id="blueBtn">青系</button>
+    <button id="redBtn">赤系</button>
+  </div>
+
+  <div class="color-picker">
     <label>グラデーションカラー1：
-      <input type="color" id="color1" value="#337ab7" />
+      <input type="color" id="color1" />
     </label>
     <label>カラー2：
-      <input type="color" id="color2" value="#23527c" />
+      <input type="color" id="color2" />
     </label>
   </div>
 
-  <div class="style-buttons">
-    <button type="button" id="indexBtn">とある魔術の禁書目録</button>
-    <button type="button" id="railgunBtn">とある科学の超電磁砲</button>
-  </div>
-
-  <div class="save-buttons">
-    <button id="downloadSVG">SVGとして保存</button>
-    <button id="downloadPNG">PNGとして保存</button>
-  </div>
+  <p id="errorMsg" style="color:red; font-weight:bold; margin-top:1rem;"></p>
 
   <div id="preview">
-    <svg
-      id="logoSVG"
-      viewBox="0 0 600 200"
-      preserveAspectRatio="xMidYMid meet"
-      style="display:none"
-    >
+    <svg id="logoSVG" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid meet">
       <defs>
         <linearGradient id="railgun-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stop-color="#337ab7" />
           <stop offset="100%" stop-color="#23527c" />
         </linearGradient>
       </defs>
-      <text
-        x="300"
-        y="100"
-        class="style-index"
-        id="svgText"
-        dominant-baseline="middle"
-        text-anchor="middle"
-      >
-        とある文字
-      </text>
+      <text x="300" y="100" class="style-index" id="svgText">とある仮設の意匠生成ロゴジェネレータ</text>
     </svg>
+  </div>
+
+  <div class="download-buttons">
+    <button id="downloadSVG">SVGとしてダウンロード</button>
+    <button id="downloadPNG">PNGとしてダウンロード</button>
   </div>
 
   <script src="js/script.js"></script>

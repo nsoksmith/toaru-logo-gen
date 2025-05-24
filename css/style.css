@@ -1,53 +1,63 @@
+@font-face {
+  font-family: "Kozuka Mincho Pro B";
+  src: local("Kozuka Mincho Pro B"), local("KozMinPro-B");
+  font-weight: bold;
+}
+
 body {
-  font-family: "Kozuka Mincho Pro B", serif, sans-serif;
+  font-family: sans-serif;
   padding: 1rem;
   background: #f4f4f4;
   text-align: center;
 }
 
-.input-inline {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.3rem;
+.input-area {
   margin-bottom: 1rem;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
-.input-inline input[type="text"] {
-  width: 80px;
-  font-size: 1.2rem;
-  padding: 0.2rem 0.4rem;
+.input-area span {
+  font-family: "Kozuka Mincho Pro B", serif;
+  font-weight: bold;
+  font-size: 1.5rem;
+  vertical-align: middle;
+  margin-right: 0.3rem;
+}
+
+.input-area input {
+  width: 3.5rem;
+  font-size: 1.5rem;
+  padding: 0.3rem 0.5rem;
+  margin: 0 0.2rem;
   text-align: center;
+  font-family: "Kozuka Mincho Pro B", serif;
 }
 
-.gradient-controls label {
-  margin: 0 0.5rem;
+.gradient-buttons {
+  margin-bottom: 1rem;
 }
 
-button {
-  margin: 0.5rem;
-  padding: 0.6rem 1.2rem;
+.gradient-buttons button {
   font-size: 1rem;
+  margin: 0 0.5rem;
+  padding: 0.5rem 1rem;
   cursor: pointer;
 }
 
-.save-buttons {
-  margin-top: 1rem;
+.color-picker {
+  margin-bottom: 1rem;
 }
 
-.save-buttons button {
-  margin: 0 0.5rem;
-  padding: 0.6rem 1.2rem;
+.color-picker label {
+  margin: 0 1rem;
   font-size: 1rem;
-  cursor: pointer;
 }
 
 #preview {
-  margin-top: 2rem;
+  margin: 2rem auto;
+  width: 100%;
   max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  height: auto;
 }
 
 svg {
@@ -55,14 +65,28 @@ svg {
   height: auto;
 }
 
+svg text {
+  dominant-baseline: middle;
+  text-anchor: middle;
+}
+
 .style-index {
-  fill: #337ab7;
+  font-family: "Kozuka Mincho Pro B", serif;
+  fill: url(#railgun-gradient);
   font-size: 48px;
-  filter: drop-shadow(2px 2px 2px #666);
+  filter: drop-shadow(2px 2px 2px #23527c);
 }
 
 .style-railgun {
+  font-family: "Kozuka Mincho Pro B", serif;
   fill: url(#railgun-gradient);
   font-size: 48px;
-  filter: drop-shadow(2px 2px 2px #c63);
+  filter: drop-shadow(2px 2px 2px #cc0000);
+}
+
+.download-buttons button {
+  font-size: 1rem;
+  margin: 0 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
 }

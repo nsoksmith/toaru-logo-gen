@@ -2,23 +2,45 @@ const kanji2Input = document.getElementById("kanji2");
 const kanji4Input = document.getElementById("kanji4");
 const katakanaInput = document.getElementById("katakana");
 const styleSelectButtons = {
-  index: document.getElementById("indexBtn"),
-  railgun: document.getElementById("railgunBtn"),
+  blue: document.getElementById("blueBtn"),
+  red: document.getElementById("redBtn"),
 };
 const svgText = document.getElementById("svgText");
 const logoSVG = document.getElementById("logoSVG");
 const color1 = document.getElementById("color1");
 const color2 = document.getElementById("color2");
+const errorMsg = document.getElementById("errorMsg");
 
-const downloadSVGBtn = document.getElementById("downloadSVG");
-const downloadPNGBtn = document.getElementById("downloadPNG");
+kanji2Input.value = "仮設";
+kanji4Input.value = "意匠生成";
+katakanaInput.value = "ロゴジェネレータ";
 
-let currentStyle = "index";
+let currentStyle = "blue";
 
 function convertToKatakana(str) {
   return str.replace(/[\u3041-\u3096]/g, (s) =>
     String.fromCharCode(s.charCodeAt(0) + 0x60)
   );
+}
+
+function checkError(kanji2, kanji4, katakana) {
+  const lowerKatakana = katakana.toLowerCase();
+
+  if (
+    kanji2 === "魔術" &&
+    kanji4 === "禁書目録" &&
+    (lowerKatakana === "いんでっくす" || lowerKatakana === "インデックス")
+  ) {
+    return "「魔術」「禁書目録」「インデックス」の組み合わせは使用できません。";
+  }
+  if (
+    kanji2 === "科学" &&
+    kanji4 === "超電磁砲" &&
+    (lowerKatakana === "れーるがん" || lowerKatakana === "レールガン")
+  ) {
+    return "「科学」「超電磁砲」「レールガン」の組み合わせは使用できません。";
+  }
+  return "";
 }
 
 function updateGradient() {
@@ -31,20 +53,30 @@ function updateGradient() {
 function updateLogo() {
   const kanji2 = kanji2Input.value.trim();
   const kanji4 = kanji4Input.value.trim();
-  const katakanaRaw = katakanaInput.value.trim();
-
-  const isComplete = kanji2 && kanji4 && katakanaRaw;
-  if (!isComplete) {
+  let katakanaRaw = katakanaInput.value.trim();
+  if (!kanji2 || !kanji4 || !katakanaRaw) {
+    errorMsg.textContent = "";
     logoSVG.style.display = "none";
     return;
   }
 
+  // 強制カタカナ変換
+  katakanaRaw = convertToKatakana(katakanaRaw);
+
+  const error = checkError(kanji2, kanji4, katakanaRaw);
+  if (error) {
+    errorMsg.textContent = error;
+    logoSVG.style.display = "none";
+    return;
+  } else {
+    errorMsg.textContent = "";
+  }
+
   logoSVG.style.display = "block";
-  const katakana = convertToKatakana(katakanaRaw);
-  svgText.textContent = `とある${kanji2}の${kanji4}${katakana}`;
+  svgText.textContent = `とある${kanji2}の${kanji4}${katakanaRaw}`;
   svgText.setAttribute(
     "class",
-    currentStyle === "index" ? "style-index" : "style-railgun"
+    currentStyle === "blue" ? "style-index" : "style-railgun"
   );
 
   updateGradient();
@@ -52,12 +84,12 @@ function updateLogo() {
 
 function setStyle(style) {
   currentStyle = style;
-  if (style === "index") {
-    // 禁書目録グラデーションカラー
+  if (style === "blue") {
+    // 青系グラデーションカラー
     color1.value = "#337ab7";
     color2.value = "#23527c";
   } else {
-    // 超電磁砲グラデーションカラー
+    // 赤系グラデーションカラー
     color1.value = "#ff9900";
     color2.value = "#cc0000";
   }
@@ -103,18 +135,17 @@ function downloadPNG() {
   img.src = url;
 }
 
-// イベントリスナー登録
 kanji2Input.addEventListener("input", updateLogo);
 kanji4Input.addEventListener("input", updateLogo);
 katakanaInput.addEventListener("input", updateLogo);
 color1.addEventListener("input", updateLogo);
 color2.addEventListener("input", updateLogo);
 
-styleSelectButtons.index.addEventListener("click", () => setStyle("index"));
-styleSelectButtons.railgun.addEventListener("click", () => setStyle("railgun"));
+styleSelectButtons.blue.addEventListener("click", () => setStyle("blue"));
+styleSelectButtons.red.addEventListener("click", () => setStyle("red"));
 
-downloadSVGBtn.addEventListener("click", downloadSVG);
-downloadPNGBtn.addEventListener("click", downloadPNG);
+document.getElementById("downloadSVG").addEventListener("click", downloadSVG);
+document.getElementById("downloadPNG").addEventListener("click", downloadPNG);
 
-// 初期設定
-setStyle("index");
+setStyle("blue");
+updateLogo();
