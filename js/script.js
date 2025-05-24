@@ -1,26 +1,49 @@
-const textInput = document.getElementById("logoText");
-const styleSelect = document.getElementById("styleSelect");
+const input1 = document.getElementById("input1");
+const input2 = document.getElementById("input2");
+const input3 = document.getElementById("input3");
 const svgText = document.getElementById("svgText");
 const color1 = document.getElementById("color1");
 const color2 = document.getElementById("color2");
-
-function updateGradient() {
-  const stop1 = document.querySelector('#railgun-gradient stop:nth-child(1)');
-  const stop2 = document.querySelector('#railgun-gradient stop:nth-child(2)');
-  stop1.setAttribute('stop-color', color1.value);
-  stop2.setAttribute('stop-color', color2.value);
-}
+const orientationRadios = document.querySelectorAll('input[name="orientation"]');
 
 function updateLogo() {
-  svgText.textContent = textInput.value || "とある文字";
-  svgText.setAttribute("class", styleSelect.value === "index" ? "style-index" : "style-railgun");
+  const part1 = input1.value.trim();
+  const part2 = input2.value.trim();
+  let part3 = input3.value.trim();
+
+  // カタカナ強制変換
+  part3 = part3.replace(/[\u3041-\u3096]/g, s =>
+    String.fromCharCode(s.charCodeAt(0) + 0x60)
+  );
+
+  svgText.textContent = `とある${part1}の${part2}${part3}`;
+
+  const orientation = [...orientationRadios].find(r => r.checked).value;
+  if (orientation === "vertical") {
+    svgText.setAttribute("transform", "rotate(-90 300 200)");
+  } else {
+    svgText.removeAttribute("transform");
+  }
+
   updateGradient();
 }
 
-textInput.addEventListener("input", updateLogo);
-styleSelect.addEventListener("change", updateLogo);
-color1.addEventListener("input", updateLogo);
-color2.addEventListener("input", updateLogo);
+function updateGradient() {
+  const stops = document.querySelectorAll("#logo-gradient stop");
+  stops[0].setAttribute("stop-color", color1.value);
+  stops[1].setAttribute("stop-color", color2.value);
+}
+
+function applyPreset(type) {
+  if (type === "index") {
+    color1.value = "#337ab7";
+    color2.value = "#23527c";
+  } else if (type === "railgun") {
+    color1.value = "#ff9900";
+    color2.value = "#cc0000";
+  }
+  updateLogo();
+}
 
 function downloadSVG() {
   const svg = document.getElementById("logoSVG");
@@ -31,9 +54,7 @@ function downloadSVG() {
   const a = document.createElement("a");
   a.href = url;
   a.download = "toaru-logo.svg";
-  document.body.appendChild(a);
   a.click();
-  document.body.removeChild(a);
 }
 
 function downloadPNG() {
@@ -41,7 +62,7 @@ function downloadPNG() {
   const svgData = new XMLSerializer().serializeToString(svg);
   const canvas = document.createElement("canvas");
   canvas.width = 600;
-  canvas.height = 200;
+  canvas.height = 400;
   const ctx = canvas.getContext("2d");
 
   const img = new Image();
@@ -55,11 +76,14 @@ function downloadPNG() {
     const a = document.createElement("a");
     a.href = pngUrl;
     a.download = "toaru-logo.png";
-    document.body.appendChild(a);
     a.click();
-    document.body.removeChild(a);
   };
   img.src = url;
 }
+
+[input1, input2, input3, color1, color2].forEach(el => {
+  el.addEventListener("input", updateLogo);
+});
+orientationRadios.forEach(r => r.addEventListener("change", updateLogo));
 
 updateLogo();

@@ -6,42 +6,48 @@
 
 body {
   font-family: sans-serif;
-  padding: 1rem;
-  background: #f4f4f4;
   text-align: center;
+  background: #f9f9f9;
+  padding: 1rem;
 }
-input, select, button {
+
+.input-group, .gradient-group, .preset-buttons, .orientation-group {
+  margin: 1rem auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+input[type="text"], input[type="color"] {
   font-size: 1rem;
   padding: 0.5rem;
-  margin: 0.5rem;
-  width: 90%;
-  max-width: 400px;
 }
+
+.fixed-text {
+  font-weight: bold;
+  align-self: center;
+}
+
 #preview {
   margin-top: 2rem;
-  width: 100%;
   max-width: 600px;
-  height: auto;
   margin-left: auto;
   margin-right: auto;
 }
+
 svg {
   width: 100%;
   height: auto;
 }
-svg text {
-  dominant-baseline: middle;
-  text-anchor: middle;
-}
-.style-index {
+
+.logo-text {
   font-family: "Kozuka Mincho Pro B", serif;
-  fill: #337ab7;
   font-size: 48px;
+  fill: url(#logo-gradient);
   filter: drop-shadow(2px 2px 2px #666);
 }
-.style-railgun {
-  font-family: 'Noto Sans JP', sans-serif;
-  fill: url(#railgun-gradient);
-  font-size: 48px;
-  filter: drop-shadow(2px 2px 2px #c63);
+
+.download-buttons {
+  margin-top: 1rem;
 }
