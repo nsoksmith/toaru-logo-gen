@@ -5,14 +5,19 @@ body {
   text-align: center;
 }
 
-.input-group {
-  margin: 0.5rem 0;
+.input-inline {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
 }
 
-input[type="text"] {
+.input-inline input[type="text"] {
+  width: 80px;
   font-size: 1.2rem;
-  padding: 0.4rem;
-  width: 200px;
+  padding: 0.2rem 0.4rem;
   text-align: center;
 }
 
