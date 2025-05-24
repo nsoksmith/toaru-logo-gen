@@ -1,37 +1,362 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>とあるロゴジェネレーター</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    @font-face {
+      font-family: "Kozuka Mincho Pro B";
+      src: local("Kozuka Mincho Pro B"), local("KozMinPro-B");
+      font-weight: bold;
+    }
+
+    body {
+      font-family: sans-serif;
+      padding: 1rem;
+      background: #f4f4f4;
+      text-align: center;
+      max-width: 700px;
+      margin: auto;
+    }
+    h1 {
+      margin-bottom: 1rem;
+    }
+
+    input[type="text"] {
+      font-size: 1.2rem;
+      padding: 0.4rem 0.5rem;
+      width: 150px;
+      margin: 0.3rem;
+      text-align: center;
+    }
+    label {
+      font-size: 1rem;
+      margin: 0 0.3rem 0 0;
+      user-select:none;
+    }
+    button {
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      margin: 0 0.5rem 1rem 0.5rem;
+      cursor: pointer;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+      margin-top: 0.3rem;
+      font-size: 0.9rem;
+      height: 1.2em;
+    }
+    #preview {
+      margin: 1rem auto;
+      max-width: 600px;
+      border: 1px solid #ccc;
+      background: white;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+    svg {
+      width: 100%;
+      height: auto;
+      user-select:none;
+    }
+    text {
+      dominant-baseline: middle;
+      text-anchor: middle;
+      font-family: "Kozuka Mincho Pro B", serif;
+      font-weight: bold;
+      filter: drop-shadow(2px 2px 2px #666);
+    }
+    #presetButtons button.active {
+      background-color: #337ab7;
+      color: white;
+      font-weight: bold;
+    }
+    .color-label {
+      display: inline-block;
+      margin: 0 0.5rem;
+      vertical-align: middle;
+    }
+    #orientationSelector {
+      margin: 1rem 0;
+      user-select:none;
+    }
+  </style>
 </head>
 <body>
   <h1>とあるロゴジェネレーター</h1>
-  <input type="text" id="logoText" placeholder="テキストを入力">
-  <select id="styleSelect">
-    <option value="index">とある魔術の禁書目録</option>
-    <option value="railgun">とある科学の超電磁砲</option>
-  </select>
-  <br>
-  <label>グラデーションカラー1：<input type="color" id="color1" value="#ff9900"></label>
-  <label>カラー2：<input type="color" id="color2" value="#cc0000"></label>
-  <br>
-  <button onclick="downloadSVG()">SVGとしてダウンロード</button>
-  <button onclick="downloadPNG()">PNGとしてダウンロード</button>
+
+  <div>
+    <label>固定：<strong>とある</strong></label>
+    <label>漢字2文字：<input id="kanji2" type="text" maxlength="2" placeholder="漢字2文字" /></label>
+    <div id="errorKanji2" class="error"></div>
+  </div>
+
+  <div>
+    <label>固定：<strong>の</strong></label>
+    <label>漢字4文字：<input id="kanji4" type="text" maxlength="4" placeholder="漢字4文字" /></label>
+    <div id="errorKanji4" class="error"></div>
+  </div>
+
+  <div>
+    <label>カタカナ：<input id="katakana" type="text" placeholder="カタカナ" /></label>
+    <div id="errorKatakana" class="error"></div>
+  </div>
+
+  <div id="presetButtons" style="margin-top:1rem;">
+    <button id="btnIndex" class="active">とある魔術の禁書目録</button>
+    <button id="btnRailgun">とある科学の超電磁砲</button>
+  </div>
+
+  <div id="orientationSelector">
+    <label><input type="radio" name="orientation" value="horizontal" checked /> 横ロゴ</label>
+    <label><input type="radio" name="orientation" value="vertical" /> 縦ロゴ</label>
+  </div>
 
   <div id="preview">
-    <svg id="logoSVG" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid meet">
+    <svg id="logoSVG" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid meet" >
       <defs>
-        <linearGradient id="railgun-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#ff9900"/>
-          <stop offset="100%" stop-color="#cc0000"/>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#337ab7"/>
+          <stop offset="100%" stop-color="#1e3c72"/>
         </linearGradient>
       </defs>
-      <text x="300" y="100" class="style-index" id="svgText">とある文字</text>
+      <text id="fixed1" x="50" y="100" fill="#337ab7">とある</text>
+      <text id="inputKanji2" x="150" y="100" fill="#337ab7" font-size="48"></text>
+      <text id="fixed2" x="280" y="100" fill="#337ab7">の</text>
+      <text id="inputKanji4" x="360" y="100" fill="#337ab7" font-size="48"></text>
+      <text id="inputKana" x="520" y="100" fill="url(#gradient)" font-size="48"></text>
     </svg>
   </div>
 
-  <script src="js/script.js"></script>
+  <button onclick="downloadSVG()">SVGとしてダウンロード</button>
+  <button onclick="downloadPNG()">PNGとしてダウンロード</button>
+
+<script>
+  const kanji2 = document.getElementById('kanji2');
+  const kanji4 = document.getElementById('kanji4');
+  const katakana = document.getElementById('katakana');
+
+  const errorKanji2 = document.getElementById('errorKanji2');
+  const errorKanji4 = document.getElementById('errorKanji4');
+  const errorKatakana = document.getElementById('errorKatakana');
+
+  const inputKanji2 = document.getElementById('inputKanji2');
+  const inputKanji4 = document.getElementById('inputKanji4');
+  const inputKana = document.getElementById('inputKana');
+
+  const fixed1 = document.getElementById('fixed1');
+  const fixed2 = document.getElementById('fixed2');
+
+  const logoSVG = document.getElementById('logoSVG');
+  const gradient = document.getElementById('gradient');
+
+  // 色プリセット
+  const presets = {
+    index: ['#337ab7', '#1e3c72'], // 禁書目録ブルー系グラデ
+    railgun: ['#ff9900', '#cc0000'] // 超電磁砲オレンジ→赤グラデ
+  };
+
+  let currentPreset = 'index';
+
+  const btnIndex = document.getElementById('btnIndex');
+  const btnRailgun = document.getElementById('btnRailgun');
+
+  const orientationRadios = document.querySelectorAll('input[name="orientation"]');
+
+  // ひらがなをカタカナに変換
+  function toKatakana(str) {
+    return str.replace(/[\u3041-\u3096]/g, ch =>
+      String.fromCharCode(ch.charCodeAt(0) + 0x60)
+    );
+  }
+
+  // 漢字チェック
+  function isKanji(str) {
+    return /^[\u4E00-\u9FFF]+$/.test(str);
+  }
+
+  // 入力検証
+  function validateInputs() {
+    let valid = true;
+
+    const k2 = kanji2.value.trim();
+    if(k2.length !== 2 || !isKanji(k2)) {
+      errorKanji2.textContent = '漢字2文字を正しく入力してください';
+      valid = false;
+    } else {
+      errorKanji2.textContent = '';
+    }
+
+    const k4 = kanji4.value.trim();
+    if(k4.length !== 4 || !isKanji(k4)) {
+      errorKanji4.textContent = '漢字4文字を正しく入力してください';
+      valid = false;
+    } else {
+      errorKanji4.textContent = '';
+    }
+
+    let kanaRaw = katakana.value.trim();
+    let kanaConv = toKatakana(kanaRaw);
+    if(!kanaConv || !/^[\u30A0-\u30FF]+$/.test(kanaConv)) {
+      errorKatakana.textContent = 'カタカナを入力してください（ひらがなは自動変換）';
+      valid = false;
+    } else {
+      errorKatakana.textContent = '';
+    }
+
+    if(valid) {
+      inputKanji2.textContent = k2;
+      inputKanji4.textContent = k4;
+      inputKana.textContent = kanaConv;
+    } else {
+      inputKanji2.textContent = '';
+      inputKanji4.textContent = '';
+      inputKana.textContent = '';
+    }
+
+    return valid;
+  }
+
+  // グラデーション更新
+  function updateGradientColors(colors) {
+    gradient.setAttribute('x1', '0%');
+    gradient.setAttribute('y1', '0%');
+    gradient.setAttribute('x2', currentOrientation === 'horizontal' ? '100%' : '0%');
+    gradient.setAttribute('y2', currentOrientation === 'horizontal' ? '0%' : '100%');
+    const stops = gradient.querySelectorAll('stop');
+    stops[0].setAttribute('stop-color', colors[0]);
+    stops[1].setAttribute('stop-color', colors[1]);
+  }
+
+  // プリセットボタン状態更新
+  function updatePresetButtons() {
+    if(currentPreset === 'index') {
+      btnIndex.classList.add('active');
+      btnRailgun.classList.remove('active');
+    } else {
+      btnIndex.classList.remove('active');
+      btnRailgun.classList.add('active');
+    }
+  }
+
+  // ロゴ向き切替
+  let currentOrientation = 'horizontal';
+
+  function updateOrientationLayout() {
+    if(currentOrientation === 'horizontal') {
+      logoSVG.setAttribute('viewBox', '0 0 600 200');
+      fixed1.setAttribute('x', 50); fixed1.setAttribute('y', 100);
+      inputKanji2.setAttribute('x', 150); inputKanji2.setAttribute('y', 100); inputKanji2.setAttribute('font-size', '48');
+      fixed2.setAttribute('x', 280); fixed2.setAttribute('y', 100);
+      inputKanji4.setAttribute('x', 360); inputKanji4.setAttribute('y', 100); inputKanji4.setAttribute('font-size', '48');
+      inputKana.setAttribute('x', 520); inputKana.setAttribute('y', 100); inputKana.setAttribute('font-size', '48');
+    } else {
+      logoSVG.setAttribute('viewBox', '0 0 200 600');
+      fixed1.setAttribute('x', 100); fixed1.setAttribute('y', 50);
+      inputKanji2.setAttribute('x', 100); inputKanji2.setAttribute('y', 150); inputKanji2.setAttribute('font-size', '40');
+      fixed2.setAttribute('x', 100); fixed2.setAttribute('y', 230);
+      inputKanji4.setAttribute('x', 100); inputKanji4.setAttribute('y', 310); inputKanji4.setAttribute('font-size', '40');
+      inputKana.setAttribute('x', 100); inputKana.setAttribute('y', 470); inputKana.setAttribute('font-size', '40');
+    }
+  }
+
+  // プリセットボタンイベント
+  btnIndex.addEventListener('click', () => {
+    currentPreset = 'index';
+    updatePresetButtons();
+    updateGradientColors(presets[currentPreset]);
+    validateInputs();
+  });
+  btnRailgun.addEventListener('click', () => {
+    currentPreset = 'railgun';
+    updatePresetButtons();
+    updateGradientColors(presets[currentPreset]);
+    validateInputs();
+  });
+
+  // ラジオ切替イベント
+  orientationRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      currentOrientation = radio.value;
+      updateOrientationLayout();
+      updateGradientColors(presets[currentPreset]);
+    });
+  });
+
+  // 入力監視
+  kanji2.addEventListener('input', () => {
+    kanji2.value = kanji2.value.replace(/[^\u4E00-\u9FFF]/g,'');
+    validateInputs();
+  });
+  kanji4.addEventListener('input', () => {
+    kanji4.value = kanji4.value.replace(/[^\u4E00-\u9FFF]/g,'');
+    validateInputs();
+  });
+  katakana.addEventListener('input', () => {
+    katakana.value = toKatakana(katakana.value).replace(/[^\u30A0-\u30FF]/g,'');
+    validateInputs();
+  });
+
+  // 初期表示
+  updatePresetButtons();
+  updateGradientColors(presets[currentPreset]);
+  updateOrientationLayout();
+  validateInputs();
+
+  // SVGダウンロード
+  function downloadSVG() {
+    if(!validateInputs()) {
+      alert('入力内容にエラーがあります。正しく入力してください。');
+      return;
+    }
+    const serializer = new XMLSerializer();
+    const source = serializer.serializeToString(logoSVG);
+    const blob = new Blob([source], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "toaru-logo.svg";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  // PNGダウンロード
+  function downloadPNG() {
+    if(!validateInputs()) {
+      alert('入力内容にエラーがあります。正しく入力してください。');
+      return;
+    }
+    const svgData = new XMLSerializer().serializeToString(logoSVG);
+    const canvas = document.createElement("canvas");
+    if(currentOrientation === 'horizontal') {
+      canvas.width = 600;
+      canvas.height = 200;
+    } else {
+      canvas.width = 200;
+      canvas.height = 600;
+    }
+    const ctx = canvas.getContext("2d");
+
+    const img = new Image();
+    const svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(svgBlob);
+
+    img.onload = function() {
+      ctx.drawImage(img, 0, 0);
+      URL.revokeObjectURL(url);
+      const pngUrl = canvas.toDataURL("image/png");
+      const a = document.createElement("a");
+      a.href = pngUrl;
+      a.download = "toaru-logo.png";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+    img.src = url;
+  }
+</script>
 </body>
 </html>
