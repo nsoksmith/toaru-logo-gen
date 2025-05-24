@@ -1,32 +1,30 @@
-@font-face {
-  font-family: "Kozuka Mincho Pro B";
-  src: local("Kozuka Mincho Pro B"), local("KozMinPro-B");
-  font-weight: bold;
-}
-
 body {
-  font-family: sans-serif;
-  text-align: center;
-  background: #f9f9f9;
+  font-family: "Kozuka Mincho Pro B", serif, sans-serif;
   padding: 1rem;
+  background: #f4f4f4;
+  text-align: center;
 }
 
-.input-group, .gradient-group, .preset-buttons, .orientation-group {
-  margin: 1rem auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
+.input-group {
+  margin: 0.5rem 0;
 }
 
-input[type="text"], input[type="color"] {
+input[type="text"] {
+  font-size: 1.2rem;
+  padding: 0.4rem;
+  width: 200px;
+  text-align: center;
+}
+
+.gradient-controls label {
+  margin: 0 0.5rem;
+}
+
+button {
+  margin: 0.5rem;
+  padding: 0.6rem 1.2rem;
   font-size: 1rem;
-  padding: 0.5rem;
-}
-
-.fixed-text {
-  font-weight: bold;
-  align-self: center;
+  cursor: pointer;
 }
 
 #preview {
@@ -41,13 +39,14 @@ svg {
   height: auto;
 }
 
-.logo-text {
-  font-family: "Kozuka Mincho Pro B", serif;
+.style-index {
+  fill: #337ab7;
   font-size: 48px;
-  fill: url(#logo-gradient);
   filter: drop-shadow(2px 2px 2px #666);
 }
 
-.download-buttons {
-  margin-top: 1rem;
+.style-railgun {
+  fill: url(#railgun-gradient);
+  font-size: 48px;
+  filter: drop-shadow(2px 2px 2px #c63);
 }

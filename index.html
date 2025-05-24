@@ -1,54 +1,75 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>とあるロゴジェネレーター</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <h1>とあるロゴジェネレーター</h1>
 
-  <form id="logoForm">
-    <div class="input-group">
-      <span class="fixed-text">とある</span>
-      <input type="text" id="input1" placeholder="漢字2文字" maxlength="2" required>
-      <span class="fixed-text">の</span>
-      <input type="text" id="input2" placeholder="漢字4文字" maxlength="4" required>
-      <input type="text" id="input3" placeholder="カタカナ" required>
-    </div>
-
-    <div class="orientation-group">
-      <label><input type="radio" name="orientation" value="horizontal" checked> 横ロゴ</label>
-      <label><input type="radio" name="orientation" value="vertical"> 縦ロゴ</label>
-    </div>
-
-    <div class="gradient-group">
-      <label>カラー1：<input type="color" id="color1" value="#ff9900"></label>
-      <label>カラー2：<input type="color" id="color2" value="#cc0000"></label>
-    </div>
-
-    <div class="preset-buttons">
-      <button type="button" onclick="applyPreset('index')">禁書目録</button>
-      <button type="button" onclick="applyPreset('railgun')">超電磁砲</button>
-    </div>
-  </form>
-
-  <div id="preview">
-    <svg id="logoSVG" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
-      <defs>
-        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#ff9900"/>
-          <stop offset="100%" stop-color="#cc0000"/>
-        </linearGradient>
-      </defs>
-      <text id="svgText" x="300" y="200" text-anchor="middle" dominant-baseline="middle" class="logo-text">とある文字</text>
-    </svg>
+  <div class="input-group">
+    <label>固定：とある</label>
   </div>
 
-  <div class="download-buttons">
-    <button onclick="downloadSVG()">SVGダウンロード</button>
-    <button onclick="downloadPNG()">PNGダウンロード</button>
+  <div class="input-group">
+    <label for="kanji2">漢字2文字</label>
+    <input type="text" id="kanji2" maxlength="2" />
+  </div>
+
+  <div class="input-group">
+    <label>固定：の</label>
+  </div>
+
+  <div class="input-group">
+    <label for="kanji4">漢字4文字</label>
+    <input type="text" id="kanji4" maxlength="4" />
+  </div>
+
+  <div class="input-group">
+    <label for="katakana">カタカナ</label>
+    <input type="text" id="katakana" />
+  </div>
+
+  <div class="gradient-controls">
+    <label>グラデーションカラー1：
+      <input type="color" id="color1" value="#337ab7" />
+    </label>
+    <label>カラー2：
+      <input type="color" id="color2" value="#23527c" />
+    </label>
+  </div>
+
+  <div class="style-buttons">
+    <button type="button" id="indexBtn">とある魔術の禁書目録</button>
+    <button type="button" id="railgunBtn">とある科学の超電磁砲</button>
+  </div>
+
+  <div id="preview">
+    <svg
+      id="logoSVG"
+      viewBox="0 0 600 200"
+      preserveAspectRatio="xMidYMid meet"
+      style="display:none"
+    >
+      <defs>
+        <linearGradient id="railgun-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#337ab7" />
+          <stop offset="100%" stop-color="#23527c" />
+        </linearGradient>
+      </defs>
+      <text
+        x="300"
+        y="100"
+        class="style-index"
+        id="svgText"
+        dominant-baseline="middle"
+        text-anchor="middle"
+      >
+        とある文字
+      </text>
+    </svg>
   </div>
 
   <script src="js/script.js"></script>
