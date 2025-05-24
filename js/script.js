@@ -10,6 +10,9 @@ const logoSVG = document.getElementById("logoSVG");
 const color1 = document.getElementById("color1");
 const color2 = document.getElementById("color2");
 
+const downloadSVGBtn = document.getElementById("downloadSVG");
+const downloadPNGBtn = document.getElementById("downloadPNG");
+
 let currentStyle = "index";
 
 function convertToKatakana(str) {
@@ -61,6 +64,45 @@ function setStyle(style) {
   updateLogo();
 }
 
+function downloadSVG() {
+  const serializer = new XMLSerializer();
+  const source = serializer.serializeToString(logoSVG);
+  const blob = new Blob([source], { type: "image/svg+xml;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "toaru-logo.svg";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function downloadPNG() {
+  const serializer = new XMLSerializer();
+  const svgData = serializer.serializeToString(logoSVG);
+  const canvas = document.createElement("canvas");
+  canvas.width = 600;
+  canvas.height = 200;
+  const ctx = canvas.getContext("2d");
+  const img = new Image();
+  const svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+  const url = URL.createObjectURL(svgBlob);
+  img.onload = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0);
+    URL.revokeObjectURL(url);
+    const pngUrl = canvas.toDataURL("image/png");
+    const a = document.createElement("a");
+    a.href = pngUrl;
+    a.download = "toaru-logo.png";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+  img.src = url;
+}
+
 // イベントリスナー登録
 kanji2Input.addEventListener("input", updateLogo);
 kanji4Input.addEventListener("input", updateLogo);
@@ -70,6 +112,9 @@ color2.addEventListener("input", updateLogo);
 
 styleSelectButtons.index.addEventListener("click", () => setStyle("index"));
 styleSelectButtons.railgun.addEventListener("click", () => setStyle("railgun"));
+
+downloadSVGBtn.addEventListener("click", downloadSVG);
+downloadPNGBtn.addEventListener("click", downloadPNG);
 
 // 初期設定
 setStyle("index");

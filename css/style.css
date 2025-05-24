@@ -32,6 +32,17 @@ button {
   cursor: pointer;
 }
 
+.save-buttons {
+  margin-top: 1rem;
+}
+
+.save-buttons button {
+  margin: 0 0.5rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
 #preview {
   margin-top: 2rem;
   max-width: 600px;
